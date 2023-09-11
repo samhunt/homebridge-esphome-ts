@@ -1,4 +1,4 @@
-//TODO: Fix Debugging
+// TODO: Fix Debugging
 
 // import { EspDevice, ReadData } from 'esphome-ts';
 // import { isRecord } from './typeguards';

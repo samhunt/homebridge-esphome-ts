@@ -25,7 +25,7 @@ export const switchHelper = (component: any, accessory: PlatformAccessory): bool
     component.on('state', (state: any) => {
         currentState = state.state as boolean;
 
-        service?.getCharacteristic(Characteristic.Active)?.updateValue(state.state);
+        service?.getCharacteristic(Characteristic.On)?.updateValue(state.state);
     });
 
     function updateEsp() {

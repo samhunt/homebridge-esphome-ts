@@ -111,7 +111,7 @@ export class EsphomePlatform implements DynamicPlatformPlugin {
 
             if (this.config.debug) {
                 this.log('Writing the raw data from your ESP Device to /tmp');
-                //TODO: Fix Debugging
+                // TODO: Fix Debugging
                 // writeReadDataToLogFile(deviceConfig.host, device);
             }
             // get accessories and listen for state changes
@@ -131,7 +131,9 @@ export class EsphomePlatform implements DynamicPlatformPlugin {
     private attachAccessory(component: any): void {
         const componentHelper = componentHelpers.get(component.type);
         if (!componentHelper) {
-            this.log(`${component.name} is currently not supported. You might want to file an issue on Github.`);
+            this.log(
+                `${component.name} (${component.type}) is currently not supported. You might want to file an issue on Github.`,
+            );
             return;
         }
 

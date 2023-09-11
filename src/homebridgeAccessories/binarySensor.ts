@@ -109,19 +109,18 @@ export const binarySensorHelper = (component: any, accessory: PlatformAccessory)
 
             service?.getCharacteristic(homekitDevice.characteristic)?.updateValue(state.state);
         });
-        
+
         function updateEsp() {
             const state = {
                 key: component.id,
                 state: currentState,
             };
-    
+
             component.connection.lightCommandService(state);
         }
 
         return true;
     }
-
 
     return false;
 };
