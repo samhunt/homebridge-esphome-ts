@@ -10,8 +10,6 @@ export const switchHelper = (component: any, accessory: PlatformAccessory): bool
 
     let currentState = false;
 
-    service?.getCharacteristic(Characteristic.On)?.setValue(component.status);
-
     service
         .getCharacteristic(Characteristic.On)
         ?.on(CharacteristicEventTypes.SET, (value: CharacteristicValue, callback: CharacteristicSetCallback) => {
