@@ -5,7 +5,7 @@ import { CharacteristicSetCallback, CharacteristicValue, PlatformAccessory } fro
 export const switchHelper = (component: any, accessory: PlatformAccessory): boolean => {
     let service = accessory.services.find((service) => service.UUID === Service.Switch.UUID);
     if (!service) {
-        service = accessory.addService(new Service.Switch(component.config.name, ''));
+        service = accessory.addService(new Service.Switch(component.name, ''));
     }
 
     let currentState = false;
