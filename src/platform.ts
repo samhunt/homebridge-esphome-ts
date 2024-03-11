@@ -13,6 +13,9 @@ interface IEsphomeDeviceConfig {
     password?: string;
     encryptionKey?: string;
     retryAfter?: number;
+
+    excludedTypes?: string[];
+    excludedNames?: string[];
 }
 
 interface IEsphomePlatformConfig extends PlatformConfig {
@@ -22,6 +25,7 @@ interface IEsphomePlatformConfig extends PlatformConfig {
     retryAfter?: number;
     discover?: boolean;
     discoveryTimeout?: number;
+
 }
 
 const DEFAULT_RETRY_AFTER = 90_000;
@@ -60,32 +64,8 @@ export class EsphomePlatform implements DynamicPlatformPlugin {
 
     protected onHomebridgeDidFinishLaunching(): void {
         const devices: Observable<IEsphomeDeviceConfig> = from(this.config.devices ?? []);
-        // TODO: Reimplement discovery
-        // if (this.config.discover) {
-        //     const excludeConfigDevices: Set<string> = new Set();
-        //     devices = concat(
-        //         discoverDevices(this.config.discoveryTimeout ?? DEFAULT_DISCOVERY_TIMEOUT, this.log).pipe(
-        //             map((discoveredDevice) => {
-        //                 const configDevice = this.config.devices?.find(({ host }) => host === discoveredDevice.host);
-        //                 let deviceConfig = discoveredDevice;
-        //                 if (configDevice) {
-        //                     excludeConfigDevices.add(configDevice.host);
-        //                     deviceConfig = { ...discoveredDevice, ...configDevice };
-        //                 }
 
-        //                 return {
-        //                     ...deviceConfig,
-        //                     // Override hostname with ip address when available
-        //                     // to avoid issues with mDNS resolution at OS level
-        //                     host: discoveredDevice.address ?? discoveredDevice.host,
-        //                 };
-        //             }),
-        //         ),
-        //         // Feed into output remaining devices from config that haven't been discovered
-        //         devices.pipe(filter(({ host }) => !excludeConfigDevices.has(host))),
-        //     );
-        // }
-
+        // simple discovery
         if (this.config.discover) {
             const discovery = new Discovery();
             discovery.on('info', (info: any) => {
@@ -120,7 +100,7 @@ export class EsphomePlatform implements DynamicPlatformPlugin {
                 // get accessories and listen for state changes
 
                 device.on('newEntity', (entity: any) => {
-                    this.attachAccessory(entity);
+                    this.attachAccessory(entity, deviceConfig);
                 });
 
                 match = true;
@@ -151,13 +131,13 @@ export class EsphomePlatform implements DynamicPlatformPlugin {
                 // get accessories and listen for state changes
 
                 device.on('newEntity', (entity: any) => {
-                    this.attachAccessory(entity);
+                    this.attachAccessory(entity, deviceConfig);
                 });
             });
         }
     }
 
-    private attachAccessory(component: any): void {
+    private attachAccessory(component: any, deviceConfig: IEsphomeDeviceConfig): void {
         const componentHelper = componentHelpers.get(component.type);
         if (!componentHelper) {
             this.log(
@@ -176,11 +156,28 @@ export class EsphomePlatform implements DynamicPlatformPlugin {
             newAccessory = true;
         }
 
-        if (!componentHelper(component, accessory)) {
-            this.log(`${component.name} could not be mapped to HomeKit. Please file an issue on Github.`);
-            if (!newAccessory) {
+        var mappedComponent = componentHelper(component, accessory);
+
+        var ignoreType = (deviceConfig.excludedTypes ?? []).indexOf(component.type) >= 0;
+        var ignoreName = (deviceConfig.excludedNames ?? []).indexOf(component.name) >= 0;
+
+        if (!mappedComponent || ignoreName || ignoreType) {
+            let message = `${component.name}`;
+            if(!mappedComponent){
+                
+                message += ` could not be mapped to HomeKit. Please file an issue on Github.`;
+            }else if(ignoreName){
+                message += ` Name excluded.`;
+            }else if (ignoreType){
+                message += ` Type excluded (${component.type}).`;
+            }
+            
+            if(!newAccessory){
+                message += ` Unregistering existing accessory.`;
                 this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
             }
+            this.log(message);
+
             return;
         }
 
