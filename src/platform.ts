@@ -20,7 +20,6 @@ interface IEsphomeDeviceConfig {
 
 interface IEsphomePlatformConfig extends PlatformConfig {
     devices?: IEsphomeDeviceConfig[];
-    blacklist?: string[];
     debug?: boolean;
     retryAfter?: number;
     discover?: boolean;
@@ -33,7 +32,6 @@ const DEFAULT_DISCOVERY_TIMEOUT = 5_000; // milliseconds
 
 export class EsphomePlatform implements DynamicPlatformPlugin {
     // protected readonly espDevices: EspDevice[] = [];
-    protected readonly blacklistSet: Set<string>;
     protected readonly subscription: Subscription;
     protected readonly accessories: PlatformAccessory[] = [];
 
@@ -51,7 +49,6 @@ export class EsphomePlatform implements DynamicPlatformPlugin {
             );
             this.config.devices = [];
         }
-        this.blacklistSet = new Set<string>(this.config.blacklist ?? []);
 
         this.api.on('didFinishLaunching', () => {
             this.onHomebridgeDidFinishLaunching();
@@ -190,13 +187,8 @@ export class EsphomePlatform implements DynamicPlatformPlugin {
     }
 
     public configureAccessory(accessory: PlatformAccessory): void {
-        if (!this.blacklistSet.has(accessory.displayName)) {
-            this.accessories.push(accessory);
-            this.logIfDebug(`cached accessory ${accessory.displayName} was added`);
-        } else {
-            this.api.unregisterPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
-            this.logIfDebug(`unregistered ${accessory.displayName} because it was blacklisted`);
-        }
+        this.accessories.push(accessory);
+        this.logIfDebug(`cached accessory ${accessory.displayName} was added`);
     }
 
     private logIfDebug(msg?: any, ...parameters: unknown[]): void {
