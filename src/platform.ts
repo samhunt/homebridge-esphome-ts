@@ -162,7 +162,7 @@ export class EsphomePlatform implements DynamicPlatformPlugin {
             let message = `${component.name}`;
             if(!mappedComponent){
                 
-                message += ` could not be mapped to HomeKit. Please file an issue on Github.`;
+                message += ` (${component.type}) could not be mapped to HomeKit. Please file an issue on Github.`;
             }else if(ignoreName){
                 message += ` Name excluded.`;
             }else if (ignoreType){
