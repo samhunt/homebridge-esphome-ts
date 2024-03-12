@@ -1,7 +1,7 @@
 # homebridge-esphome-ts
 
 #### This library adds Encryption, additional entity support, and stability to the original library [homebridge-esphome-ts](https://github.com/lucavb/homebridge-esphome-ts) by @lucavb
-This was achieved, by substiting [esphome-native-api](https://github.com/twocolors/esphome-native-api/)b\ for [esphome-ts](https://github.com/lucavb/esphome-ts)
+This was achieved, by substiting [esphome-native-api](https://github.com/twocolors/esphome-native-api/) for [esphome-ts](https://github.com/lucavb/esphome-ts)
 
 This plugin integrates the [esphome](https://esphome.io/) platform into homebridge so that you don't have to go
 through homeassistant if you don't want to (not that there is anything wrong with that). It makes use of the native API of esphome
@@ -13,6 +13,7 @@ Supported components include:
 -   Switches
 -   BinarySensors (motion, window, door, smoke and leakage)
 -   Sensors (temperature & humidity at the moment)
+-   TextSensors (limited support using Diagnostic HomeKit Sensor type)
 
 This project is currently still in beta, but I thought that many eyes see more than just
 my two :)
