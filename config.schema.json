@@ -30,6 +30,22 @@
                             "name": "Encyption Key",
                             "type": "string",
                             "required": false
+                        },
+                        "excludedNames": {
+                            "name": "Excluded Names",
+                            "type": "array",
+                            "required": false,
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "excludedTypes": {
+                            "name": "Excluded Types",
+                            "type": "array",
+                            "required": false,
+                            "items": {
+                                "type": "string"
+                            }
                         }
                     }
                 }
@@ -65,7 +81,27 @@
                         "devices[].host",
                         "devices[].port",
                         "devices[].password",
-                        "devices[].encryptionKey"
+                        "devices[].encryptionKey",
+                        {
+                            "key": "devices[].excludedTypes",
+                            "type": "section",
+                            "expandable": true,
+                            "expanded": true,
+                            "title": "Excluded Types",
+                            "items": [
+                                "devices[].excludedTypes[]"
+                            ]
+                        },
+                        {
+                            "key": "devices[].excludedNames",
+                            "type": "section",
+                            "expandable": true,
+                            "expanded": true,
+                            "title": "Excluded Names",
+                            "items": [
+                                "devices[].excludedNames[]"
+                            ]
+                        }
                     ]
                 }
             ]
