@@ -143,7 +143,7 @@ export class EsphomePlatform implements DynamicPlatformPlugin {
             return;
         }
 
-        const uuid = UUIDGen.generate(component.config.key.toString());
+        const uuid = UUIDGen.generate(component.name + component.config.key.toString());
         let newAccessory = false;
 
         let accessory: PlatformAccessory | undefined = this.accessories.find((accessory) => accessory.UUID === uuid);
@@ -161,7 +161,6 @@ export class EsphomePlatform implements DynamicPlatformPlugin {
         if (!mappedComponent || ignoreName || ignoreType) {
             let message = `${component.name}`;
             if(!mappedComponent){
-                
                 message += ` (${component.type}) could not be mapped to HomeKit. Please file an issue on Github.`;
             }else if(ignoreName){
                 message += ` Name excluded.`;
@@ -178,8 +177,13 @@ export class EsphomePlatform implements DynamicPlatformPlugin {
             return;
         }
 
-        this.log(`${component.name} discovered and setup.`);
-        if (accessory && newAccessory) {
+        if(newAccessory)
+        {
+            this.log(`${component.name} discovered and setup.`);
+        }else{
+            return;
+        }
+        if (accessory) {
             this.log(`adding accessory ${component.name} ${accessory.UUID}`);
             this.accessories.push(accessory);
             this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
