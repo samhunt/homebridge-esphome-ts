@@ -184,7 +184,7 @@ export class EsphomePlatform implements DynamicPlatformPlugin {
             return;
         }
         if (accessory) {
-            this.log(`adding accessory ${component.name} ${accessory.UUID}`);
+            this.log(`${component.name} added with UUID: ${accessory.UUID}`);
             this.accessories.push(accessory);
             this.api.registerPlatformAccessories(PLUGIN_NAME, PLATFORM_NAME, [accessory]);
         }
