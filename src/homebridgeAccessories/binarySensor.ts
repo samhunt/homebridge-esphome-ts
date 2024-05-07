@@ -116,7 +116,7 @@ export const binarySensorHelper = (component: any, accessory: PlatformAccessory)
                 state: currentState,
             };
 
-            component.connection.lightCommandService(state);
+            component.connection.buttonCommandService(state);
         }
 
         return true;
