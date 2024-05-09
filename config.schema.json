@@ -65,6 +65,18 @@
                 "type": "integer",
                 "minimum": 0,
                 "required": false
+            },
+            "co2Threshold": {
+                "title": "Carbon Dioxide (CO2) Alert Level Threshold",
+                "type": "integer",
+                "minimum": 400,
+                "required": false
+            },
+            "coThreshold": {
+                "title": "Carbon Monoxide Alert Level Threshold",
+                "type": "integer",
+                "minimum": 0,
+                "required": false
             }
         }
     },
@@ -107,6 +119,8 @@
             ]
         },
         "debug",
-        "discover"
+        "discover",
+        "coThreshold",
+        "co2Threshold"
     ]
 }

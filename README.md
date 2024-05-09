@@ -64,6 +64,14 @@ Both `retryAfter` keys are as explained optional and need to contain an integer 
 after what time frame it should try to reconnect. Keep in mind that this value needs to be in _milliseconds_. The inner
 `retryAfter` will trump the outer value if present. The default value is 90 seconds.
 
+### co2Threshold & coThreshold
+
+When a CO2 and/or CO level is implemented in ESPHome, these thresholds are responsible to raise an alert in the Home application, via a notification and a message in the app. This is used to prevent intoxication.
+
+> Reminder:
+> CO is the Carbon Monoxide
+> CO2 is the carbon Dioxide
+
 ### Blacklisting
 
 If for some reason you want to exclude a specific component from this plugin just

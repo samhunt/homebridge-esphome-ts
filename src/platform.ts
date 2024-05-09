@@ -18,13 +18,14 @@ interface IEsphomeDeviceConfig {
     excludedNames?: string[];
 }
 
-interface IEsphomePlatformConfig extends PlatformConfig {
+export interface IEsphomePlatformConfig extends PlatformConfig {
     devices?: IEsphomeDeviceConfig[];
     debug?: boolean;
     retryAfter?: number;
     discover?: boolean;
     discoveryTimeout?: number;
-
+    coThreshold?: number;
+    co2Threshold?: number;
 }
 
 const DEFAULT_RETRY_AFTER = 90_000;
@@ -153,7 +154,7 @@ export class EsphomePlatform implements DynamicPlatformPlugin {
             newAccessory = true;
         }
 
-        var mappedComponent = componentHelper(component, accessory);
+        var mappedComponent = componentHelper(component, accessory, this.config);
 
         var ignoreType = (deviceConfig.excludedTypes ?? []).indexOf(component.type) >= 0;
         var ignoreName = (deviceConfig.excludedNames ?? []).indexOf(component.name) >= 0;
