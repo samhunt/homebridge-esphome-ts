@@ -32,7 +32,7 @@ export const switchHelper = (component: any, accessory: PlatformAccessory): bool
             state: currentState,
         };
 
-        component.connection.lightCommandService(state);
+        component.connection.switchCommandService(state);
     }
 
     return true;
