@@ -7,7 +7,7 @@ import { coverHelper } from './cover';
 import { textSensorHelper } from './textSensor';
 import { PlatformAccessory } from 'homebridge';
 
-export type ComponentHelper = (component: any, accessory: PlatformAccessory) => boolean;
+export type ComponentHelper = (component: any, accessory: PlatformAccessory, config: any) => boolean;
 
 export const componentHelpers = new Map<string, ComponentHelper>([
     ['Light', lightHelper],
